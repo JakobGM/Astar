@@ -36,5 +36,12 @@ class MazeSolver(AStar):
         else:
             return self.maze[x, y] in self.REACHABLE_NODES
 
+    def distance_between(self, n1: Tuple, n2: Tuple) -> int:
+        # Neighbouring nodes are always 1 units apart
+        return 1
+
+    def heuristic_cost_estimate(self, current: Tuple, goal: Tuple) -> int:
+        return abs(goal[0] - current[0]) + abs(goal[1] - current[1])
+
 
 all = ['MazeSolver']

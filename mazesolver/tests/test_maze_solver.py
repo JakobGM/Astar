@@ -51,3 +51,14 @@ class TestMazeSolver:
         ms = MazeSolver(maze)
 
         assert ms.neighbors((0,0)) == ((1,0),)
+
+    def test_distance_between_adjacent_nodes(self, maze_solver):
+        assert maze_solver.distance_between(None, None) == 1
+
+    def test_heuristic_cost_estimate(self, maze_solver):
+        f = maze_solver.heuristic_cost_estimate
+
+        assert f((0, 0), (0, 0)) == 0
+        assert f((0, 1), (0, 0)) == 1
+        assert f((0, 0), (0, 1)) == 1
+        assert f((3, 3), (0, 1)) == 5
