@@ -16,14 +16,19 @@ class MazeSolver(AStar):
         # All lines need to be of the same width as the first line
         self.width = len(lines[0])
 
-        items = [[c for c in line] for line in lines if len(line) == self.width]
+        items = [
+            [c for c in line]
+            for line
+            in lines
+            if len(line) == self.width
+        ]
         self.height = len(items)
 
         self.maze = np.array(items)
 
         assert self.height, self.width == self.maze.shape
 
-        start_index = np.where(self.maze=='A')
+        start_index = np.where(self.maze == 'A')
         self.start = (start_index[0][0], start_index[1][0],)
 
         goal_index = np.where(self.maze == 'B')
