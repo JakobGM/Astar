@@ -23,6 +23,12 @@ class MazeSolver(AStar):
 
         assert self.height, self.width == self.maze.shape
 
+        start_index = np.where(self.maze=='A')
+        self.start = (start_index[0][0], start_index[1][0],)
+
+        goal_index = np.where(self.maze == 'B')
+        self.goal = (goal_index[0][0], goal_index[1][0],)
+
     def neighbors(self, node: Tuple):
         x, y = node
         nnodes = ((x - 1, y), (x, y - 1), (x + 1, y), (x, y + 1))

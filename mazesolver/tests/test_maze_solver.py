@@ -23,6 +23,13 @@ class TestMazeSolver:
         assert ms.width == 3
         assert ms.height == 2
 
+    def test_start_and_goal_index(self):
+        maze = '.#.\nAB.'
+        ms = MazeSolver(maze)
+
+        assert ms.start == (1, 0,)
+        assert ms.goal == (1, 1,)
+
     def test_reachable(self):
         maze = 'A#B\n.#.\n...'
         ms = MazeSolver(maze)
