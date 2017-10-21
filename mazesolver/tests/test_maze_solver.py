@@ -103,3 +103,11 @@ class TestMazeSolver:
         maze_solver.visualize()
         out, _ = capsys.readouterr()
         assert out == '-----\n|O#O|\n|O#O|\n|OOO|\n-----\n'
+
+    def test_solving_solvable_mazes(self):
+        solvable_maze_numbers = ['1', '2', '3', '4']
+        for num in solvable_maze_numbers:
+            with open('mazesolver/tests/boards/board-1-' + num + '.txt') as f:
+                ms = MazeSolver(f.read())
+                ms.solve()
+                assert ms.success
