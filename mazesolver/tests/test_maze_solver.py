@@ -57,7 +57,7 @@ class TestMazeSolver:
         maze = 'A#B\n.#.\n...'
         ms = MazeSolver(maze)
 
-        assert ms.neighbors((0,0)) == ((1,0),)
+        assert ms.neighbors((0, 0)) == ((1, 0),)
 
     def test_distance_between_adjacent_nodes(self, maze_solver):
         assert maze_solver.distance_between(None, None) == 1
@@ -69,3 +69,7 @@ class TestMazeSolver:
         assert f((0, 1), (0, 0)) == 1
         assert f((0, 0), (0, 1)) == 1
         assert f((3, 3), (0, 1)) == 5
+
+    def test_solve(self, maze_solver):
+        solution = [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2), (1, 2), (0, 2)]
+        assert maze_solver.solve() == solution

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 import numpy as np
 
 from astar import AStar
@@ -53,6 +53,16 @@ class MazeSolver(AStar):
 
     def heuristic_cost_estimate(self, current: Tuple, goal: Tuple) -> int:
         return abs(goal[0] - current[0]) + abs(goal[1] - current[1])
+
+    def solve(self) -> List[Tuple]:
+        # self.astar() returns a generator, so it is cast into a list
+        self.path = list(self.astar(self.start, self.goal))
+
+        self.solved_maze = self.maze.copy()
+        for position in self.path:
+            self.solved_maze[position] = 'O'
+
+        return self.path
 
 
 all = ['MazeSolver']
