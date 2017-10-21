@@ -34,6 +34,8 @@ class MazeSolver(AStar):
         goal_index = np.where(self.maze == 'B')
         self.goal = (goal_index[0][0], goal_index[1][0],)
 
+        self.solve_attempted = False
+
     def neighbors(self, node: Tuple):
         x, y = node
         nnodes = ((x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1))
@@ -61,26 +63,43 @@ class MazeSolver(AStar):
         return current == self.goal
 
     def solve(self) -> List[Tuple]:
-        # self.astar() returns a generator, so it is cast into a list
-        self.path = list(self.astar(self.start, self.goal))
+        self.path = self.astar(self.start, self.goal)
 
-        self.solved_maze = self.maze.copy()
-        for position in self.path:
-            self.solved_maze[position] = 'O'
+        # Successful self.astar() returns a generator, so it is cast into a
+        # list
+        if not self.path is None:
+            self.path = list(self.path)
+            self.success = True
+
+            self.solved_maze = self.maze.copy()
+            for position in self.path:
+                self.solved_maze[position] = 'O'
+        else:
+            self.success = False
+
+        self.solve_attempted = True
 
         return self.path
 
     def visualize(self) -> None:
-        if not hasattr(self, 'solved_maze'):
+        if not self.solve_attempted:
             self.solve()
 
-        print('-' * (self.width + 2))
-        for row in range(0, self.height):
+        if self.success:
+            self.print_maze(self.solved_maze)
+        else:
+            print("Could not find solution to the maze!")
+            self.print_maze(self.maze)
+
+    @staticmethod
+    def print_maze(maze) -> None:
+        print('-' * (maze.shape[1] + 2))
+        for row in range(0, maze.shape[0]):
             print('|', end='')
-            for col in range(0, self.width):
-                print(self.solved_maze[row, col], end='')
+            for col in range(0, maze.shape[1]):
+                print(maze[row, col], end='')
             print('|')
-        print('-' * (self.width + 2))
+        print('-' * (maze.shape[1] + 2))
 
 
 all = ['MazeSolver']
