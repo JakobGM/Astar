@@ -67,6 +67,21 @@ class TestMazeSolver:
 
         assert ms.neighbors((0, 0)) == ((1, 0),)
 
+    def test_complex_neighbours_case(self):
+        maze =  '######\n' + \
+                '..A.#B\n' + \
+                '.####.\n' + \
+                '......\n'
+        ms = MazeSolver(maze)
+        assert ms.neighbors((1, 2)) == (
+            (1, 3),
+            (1, 1),
+        )
+        assert ms.neighbors((2, 5)) == (
+            (3, 5),
+            (1, 5),
+        )
+
     def test_distance_between_adjacent_nodes(self, maze_solver):
         assert maze_solver.distance_between(None, None) == 1
 

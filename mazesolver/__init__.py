@@ -36,16 +36,19 @@ class MazeSolver(AStar):
 
     def neighbors(self, node: Tuple):
         x, y = node
-        nnodes = ((x - 1, y), (x, y - 1), (x + 1, y), (x, y + 1))
+        nnodes = ((x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1))
         return tuple(nnode for nnode in nnodes if self.reachable(nnode))
 
-    def reachable(self, node: Tuple) -> bool:
-        x, y = node
-
-        if not ((0 <= x < self.width) and (0 <= y < self.height)):
+    def reachable(self, node: Tuple[int, int]) -> bool:
+        # Numpy allows negative indexing, so this needs to be guarded against
+        if node[0] < 0 or node[1] < 0:
             return False
-        else:
-            return self.maze[x, y] in self.REACHABLE_NODES
+
+        try:
+            return self.maze[node] in self.REACHABLE_NODES
+        except IndexError:
+            # Too big an index is out of bounds of the maze
+            return False
 
     def distance_between(self, n1: Tuple, n2: Tuple) -> int:
         # Neighbouring nodes are always 1 units apart
