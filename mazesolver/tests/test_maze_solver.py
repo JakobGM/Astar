@@ -73,3 +73,8 @@ class TestMazeSolver:
     def test_solve(self, maze_solver):
         solution = [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2), (1, 2), (0, 2)]
         assert maze_solver.solve() == solution
+
+    def test_visualize(self, maze_solver, capfd):
+        maze_solver.visualize()
+        out, _ = capfd.readouterr()
+        assert out == '-----\n|O#O|\n|O#O|\n|OOO|\n-----\n'

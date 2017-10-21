@@ -64,5 +64,17 @@ class MazeSolver(AStar):
 
         return self.path
 
+    def visualize(self) -> None:
+        if not hasattr(self, 'solved_maze'):
+            self.solve()
+
+        print('-' * (self.width + 2))
+        for row in range(0, self.height):
+            print('|', end='')
+            for col in range(0, self.width):
+                print(self.solved_maze[row, col], end='')
+            print('|')
+        print('-' * (self.width + 2))
+
 
 all = ['MazeSolver']
