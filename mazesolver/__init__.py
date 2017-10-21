@@ -54,6 +54,9 @@ class MazeSolver(AStar):
     def heuristic_cost_estimate(self, current: Tuple, goal: Tuple) -> int:
         return abs(goal[0] - current[0]) + abs(goal[1] - current[1])
 
+    def is_goal_reached(self, current, goal):
+        return current == self.goal
+
     def solve(self) -> List[Tuple]:
         # self.astar() returns a generator, so it is cast into a list
         self.path = list(self.astar(self.start, self.goal))

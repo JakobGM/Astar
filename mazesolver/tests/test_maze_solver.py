@@ -30,6 +30,14 @@ class TestMazeSolver:
         assert ms.start == (1, 0,)
         assert ms.goal == (1, 1,)
 
+    def test_is_goal_reached(self):
+        maze = '.#.\nAB.'
+        ms = MazeSolver(maze)
+
+        assert ms.is_goal_reached((0, 0), (0, 0)) is False
+        assert ms.is_goal_reached((1, 0), (0, 0)) is False
+        assert ms.is_goal_reached((1, 1), (0, 0)) is True
+
     def test_reachable(self):
         maze = 'A#B\n.#.\n...'
         ms = MazeSolver(maze)
