@@ -105,4 +105,22 @@ class MazeSolver(AStar):
         print('-' * (maze.shape[1] + 2))
 
 
-all = ['MazeSolver']
+class TerrainMazeSolver(MazeSolver):
+    REACHABLE_NODES = ['w', 'm', 'f', 'g', 'r', 'A', 'B']
+    COST_OF = {
+        'w': 100,
+        'm': 50,
+        'f': 10,
+        'g': 5,
+        'r': 1,
+        # Start and goal nodes need to always be traversed, so the cost does
+        # not matter
+        'A': 0,
+        'B': 0,
+    }
+
+    def distance_between(self, n1: Node, n2: Node) -> int:
+        return self.COST_OF[self.maze[n2]]
+
+
+all = ['MazeSolver', 'TerrainMazeSolver']
