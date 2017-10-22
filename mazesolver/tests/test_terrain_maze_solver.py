@@ -17,3 +17,12 @@ class TestTerrainMazeSolver:
             (1, 0),
         )
         assert grasslands_cost == 5
+
+    def test_with_the_given_boards(self):
+        solvable_maze_numbers = ['1', '2', '3', '4']
+
+        for num in solvable_maze_numbers:
+            with open('mazesolver/tests/boards/board-2-' + num + '.txt') as f:
+                ms = TerrainMazeSolver(f.read())
+                ms.solve()
+                assert ms.success
