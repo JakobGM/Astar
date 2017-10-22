@@ -4,6 +4,9 @@ import numpy as np
 from astar import AStar
 
 
+Node = Tuple[int, int]
+
+
 class MazeSolver(AStar):
     """
     Each node is represented by its index (x,y) in the maze array
@@ -36,12 +39,12 @@ class MazeSolver(AStar):
 
         self.solve_attempted = False
 
-    def neighbors(self, node: Tuple):
+    def neighbors(self, node: Node):
         x, y = node
         nnodes = ((x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1))
         return tuple(nnode for nnode in nnodes if self.reachable(nnode))
 
-    def reachable(self, node: Tuple[int, int]) -> bool:
+    def reachable(self, node: Node) -> bool:
         # Numpy allows negative indexing, so this needs to be guarded against
         if node[0] < 0 or node[1] < 0:
             return False
@@ -52,17 +55,17 @@ class MazeSolver(AStar):
             # Too big an index is out of bounds of the maze
             return False
 
-    def distance_between(self, n1: Tuple, n2: Tuple) -> int:
+    def distance_between(self, n1: Node, n2: Node) -> int:
         # Neighbouring nodes are always 1 units apart
         return 1
 
-    def heuristic_cost_estimate(self, current: Tuple, goal: Tuple) -> int:
+    def heuristic_cost_estimate(self, current: Node, goal: Node) -> int:
         return abs(goal[0] - current[0]) + abs(goal[1] - current[1])
 
     def is_goal_reached(self, current, goal):
         return current == self.goal
 
-    def solve(self) -> List[Tuple]:
+    def solve(self) -> List[Node]:
         self.path = self.astar(self.start, self.goal)
 
         # Successful self.astar() returns a generator, so it is cast into a
