@@ -3,6 +3,8 @@
 
 from abc import ABCMeta, abstractmethod
 from heapq import heappush, heappop
+from typing import Tuple
+from queue import Queue, PriorityQueue
 
 __author__ = "Julien Rialland"
 __copyright__ = "Copyright 2012-2017, J.Rialland"
@@ -75,35 +77,70 @@ class AStar:
         else:
             return reversed(list(_gen()))
 
-    def astar(self, start, goal, reversePath=False):
+    def astar(self, start, goal, reversePath=False, method='Astar'):
         if self.is_goal_reached(start, goal):
             return [start]
         searchNodes = AStar.SearchNodeDict()
         startNode = searchNodes[start] = AStar.SearchNode(
             start, gscore=.0, fscore=self.heuristic_cost_estimate(start, goal))
-        openSet = []
-        heappush(openSet, startNode)
-        while openSet:
-            current = heappop(openSet)
+
+        # Save closed nodes to a set for algorithmic analysis
+        self.closedSet = set()
+
+        # Choose queue type of open nodes based on method
+        if method in ('Astar', 'dijkstra'):
+            self.openSet = PriorityQueue(maxsize=0)
+        elif method == 'BFS':
+            self.openSet = Queue(maxsize=0)
+        else:
+            raise RuntimeError('Invalid method for cheapest path')
+
+        # The start node is the first open node
+        self.openSet.put(startNode)
+
+        while not self.openSet.empty():
+            current = self.openSet.get()
+
+            # Check if we have reached the goal
             if self.is_goal_reached(current.data, goal):
                 return self.reconstruct_path(current, reversePath)
+
             current.out_openset = True
             current.closed = True
+
+            self.closedSet.add(current)
             for neighbor in [searchNodes[n] for n in self.neighbors(current.data)]:
                 if neighbor.closed:
                     continue
+
                 tentative_gscore = current.gscore + \
                     self.distance_between(current.data, neighbor.data)
                 if tentative_gscore >= neighbor.gscore:
                     continue
+
                 neighbor.came_from = current
                 neighbor.gscore = tentative_gscore
-                neighbor.fscore = tentative_gscore + \
-                    self.heuristic_cost_estimate(neighbor.data, goal)
+                neighbor.fscore = tentative_gscore
+
+                # Only use heuristic cost estimate for Astar method
+                if method == 'Astar':
+                    neighbor.fscore += \
+                        self.heuristic_cost_estimate(neighbor.data, goal)
+
                 if neighbor.out_openset:
                     neighbor.out_openset = False
-                    heappush(openSet, neighbor)
+                    self.openSet.put(neighbor)
+
         return None
+
+    @property
+    def closed_set(self):
+        return tuple(node.data for node in self.closedSet)
+
+    @property
+    def open_set(self) -> Tuple[Tuple[int, int], ...]:
+        return tuple(node.data for node in self.openSet.queue)
+
 
 def find_path(start, goal, neighbors_fnct, reversePath=False, heuristic_cost_estimate_fnct=lambda a, b: Infinite, distance_between_fnct=lambda a, b: 1.0, is_goal_reached_fnct=lambda a, b: a == b):
     """A non-class version of the path finding algorithm"""

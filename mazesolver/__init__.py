@@ -68,8 +68,8 @@ class MazeSolver(AStar):
     def is_goal_reached(self, current, goal):
         return current == self.goal
 
-    def solve(self) -> List[Node]:
-        self.path = self.astar(self.start, self.goal)
+    def solve(self, method='Astar') -> List[Node]:
+        self.path = self.astar(self.start, self.goal, method=method)
 
         # Successful self.astar() returns a generator, so it is cast into a
         # list
