@@ -78,7 +78,9 @@ class MazeSolver(AStar):
             self.success = True
 
             self.solved_maze = self.maze.copy()
-            for position in self.path:
+
+            # Fill in the found path, except for start and goal
+            for position in self.path[1:-1]:
                 self.solved_maze[position] = 'O'
         else:
             self.success = False
