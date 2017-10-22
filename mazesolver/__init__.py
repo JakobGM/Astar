@@ -1,4 +1,7 @@
 from typing import Tuple, List
+
+import colored
+from colored import stylize
 import numpy as np
 
 from astar import AStar
@@ -141,5 +144,21 @@ class TerrainMazeSolver(MazeSolver):
     def distance_between(self, n1: Node, n2: Node) -> int:
         return self.COST_OF[self.maze[n2]]
 
+    @classmethod
+    def node_representation(cls, maze: np.array, node: Node) -> str:
+        STYLE_OF = {
+            'w': colored.bg('blue'),
+            'm': colored.bg(243),
+            'f': colored.bg(28),
+            'g': colored.bg(119),
+            'r': colored.bg(130),
+            'A': colored.bg(1),
+            'B': colored.bg(1),
+            'O': colored.bg(1),
+        }
+        type = maze[node]
+        return stylize(type, STYLE_OF[type] + colored.fg('white'))
+
 
 all = ['MazeSolver', 'TerrainMazeSolver']
+
