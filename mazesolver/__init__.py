@@ -94,15 +94,34 @@ class MazeSolver(AStar):
             print("Could not find solution to the maze!")
             self.print_maze(self.maze)
 
-    @staticmethod
-    def print_maze(maze) -> None:
+    @classmethod
+    def print_maze(cls, maze) -> None:
+        # Print top boarder of maze
         print('-' * (maze.shape[1] + 2))
+
         for row in range(0, maze.shape[0]):
+            # Print left boarder of maze
             print('|', end='')
+
             for col in range(0, maze.shape[1]):
-                print(maze[row, col], end='')
+                # Print the text representation of each individual node
+                print(
+                    cls.node_representation(
+                        maze=maze,
+                        node=(row, col),
+                    ),
+                    end='',
+                )
+
+            # Print left boarder of maze
             print('|')
+
+        # Print bottom boarder of maze
         print('-' * (maze.shape[1] + 2))
+
+    @classmethod
+    def node_representation(cls, maze: np.array, node: Node) -> str:
+        return maze[node]
 
 
 class TerrainMazeSolver(MazeSolver):
