@@ -123,7 +123,7 @@ class AStar:
                 neighbor.fscore = tentative_gscore
 
                 # Only use heuristic cost estimate for Astar method
-                if method == 'Astar':
+                if method.lower() == 'astar':
                     neighbor.fscore += \
                         self.heuristic_cost_estimate(neighbor.data, goal)
 
