@@ -88,9 +88,9 @@ class AStar:
         self.closedSet = set()
 
         # Choose queue type of open nodes based on method
-        if method in ('Astar', 'dijkstra'):
+        if method.lower() in ('astar', 'dijkstra'):
             self.openSet = PriorityQueue(maxsize=0)
-        elif method == 'BFS':
+        elif method.lower() == 'bfs':
             self.openSet = Queue(maxsize=0)
         else:
             raise RuntimeError('Invalid method for cheapest path')
