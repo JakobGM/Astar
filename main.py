@@ -37,5 +37,6 @@ if argv[1] == '3':
                     'Solution for board "{}" found with the {}-algorithm'\
                     .format(board_name, method)
                 )
-                maze_solver.visualize()
+                # maze_solver.visualize()
+                maze_solver.representation(with_open_closed=True)
                 print('\u2500' * 60)

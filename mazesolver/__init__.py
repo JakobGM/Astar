@@ -126,7 +126,68 @@ class MazeSolver(AStar):
 
     @classmethod
     def node_representation(cls, maze: np.array, node: Node) -> str:
-        return maze[node]
+        STYLE_OF = {
+            '.': colored.bg('black'),
+            '#': colored.bg(239),
+            '-': colored.bg('white'),
+            '|': colored.bg('white'),
+            'A': colored.bg(1),
+            'B': colored.bg(1),
+            'O': colored.bg('dark_orange_3b'),
+        }
+        type = maze[node]
+        return stylize(type[-1], STYLE_OF[type[0]] + colored.fg('white'))
+
+    def representation(
+        self,
+        with_path=True,
+        with_open_closed=False,
+    ) -> np.array:
+        """
+        Returns a matrix which when printed elemntwise shows a nice visual
+        representation of the maze.
+        """
+        rows = self.height + 2
+        cols = self.width + 2
+
+        # Preallocate varstring array
+        items = rows * cols
+        self._rep_mat = np\
+            .array(('',) * items, dtype=object)\
+            .reshape(
+                (self.height + 2),
+                (self.width + 2),
+            )
+
+        # Boarder of maze
+        self._rep_mat[:, 0] = '|'
+        self._rep_mat[:, -1] = '|'
+        self._rep_mat[0, :] = '-'
+        self._rep_mat[-1, :] = '-'
+
+        if with_path:
+            self._rep_mat[1:-1, 1:-1] = self.solved_maze
+        else:
+            self._rep_mat[1:-1, 1:-1] = self.maze
+
+        if with_open_closed:
+            for node in self.open_set:
+                self._rep_mat[node] += '*'
+            for node in self.closed_set:
+                self._rep_mat[node] += 'x'
+
+        for row in range(rows):
+            for col in range(cols):
+                self._rep_mat[row, col] = self.node_representation(
+                    self._rep_mat,
+                    (row, col),
+                )
+
+        rows, cols = self._rep_mat.shape
+        for row in range(rows):
+            for col in range(cols):
+                print(self._rep_mat[row, col], end='')
+            print()
 
 
 class TerrainMazeSolver(MazeSolver):
@@ -149,6 +210,8 @@ class TerrainMazeSolver(MazeSolver):
     @classmethod
     def node_representation(cls, maze: np.array, node: Node) -> str:
         STYLE_OF = {
+            '-': colored.bg('white'),
+            '|': colored.bg('white'),
             'w': colored.bg('blue'),
             'm': colored.bg(243),
             'f': colored.bg(28),
@@ -156,10 +219,10 @@ class TerrainMazeSolver(MazeSolver):
             'r': colored.bg(130),
             'A': colored.bg(1),
             'B': colored.bg(1),
-            'O': colored.bg(1),
+            'O': colored.bg('dark_orange_3b'),
         }
         type = maze[node]
-        return stylize(type, STYLE_OF[type] + colored.fg('white'))
+        return stylize(type[-1], STYLE_OF[type[0]] + colored.fg('white'))
 
 
 all = ['MazeSolver', 'TerrainMazeSolver']
